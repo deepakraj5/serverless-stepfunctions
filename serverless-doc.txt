@@ -1,0 +1,19 @@
+serverless with nodejs
+
+* install serverless via npm
+* init serverless project by cmd (serverless)
+* select the project template (in my case aws-nodejs)
+* install packages for app like (express, aws-sdk, serverless-http, serverless-offline)
+	* serverless-offline package is to test the endpoint in the local server
+* Create and configure AWS sdk for DynamoDB
+* Create a service file for CRUD operation
+* in controller create the endpoint for CRUD operation and export with handler using serverless-http
+* serverless.yml file:
+	* define the handler
+	* under the events define the path and method
+	* under plugins add "serverless-offline"
+* to start the application in local server use the command serverless offline start
+* to deploy the application on aws lambda use cmd (sls deploy)
+* to allow DynamoDB in lambda function (on aws) need to give permission
+	* configuration -> permissions -> select role -> Add permissions -> create inline policy
+	* choose DynamoDB service and review policy

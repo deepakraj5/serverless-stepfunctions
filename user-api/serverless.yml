@@ -1,0 +1,34 @@
+service: user-api
+app: user-api
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: ap-south-1
+
+functions:
+  usersAPI:
+    handler: users/controller/user.handler
+    events:
+      - http:
+          path: /users
+          method: POST
+      - http:
+          path: /users
+          method: GET
+      - http:
+          path: /users/{user_id}
+          method: GET
+      - http:
+          path: /users/{user_id}
+          method: DELETE
+      - http:
+          path: /users/{user_id}
+          method: PUT
+
+
+plugins:
+  - serverless-offline

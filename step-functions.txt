@@ -1,0 +1,9 @@
+step functions
+
+* create a serverless project with aws-nodejs template
+* create a handler function and map in serverless.yml file
+* install "serverless-step-functions" plugin
+* define the serverless-step-functions plugin in serverless.yml file
+* create the lambda handlers
+* define the step function state machine and states
+* Start new execution and see the result in the step function console

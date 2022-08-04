@@ -1,0 +1,52 @@
+service: step-functions
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: ap-south-1
+
+functions:
+  randomNumber:
+    handler: handler.randomNumber
+  randomNumberFromRange:
+    handler: handler.randomNumberFromRange
+
+plugins:
+  - serverless-step-functions
+  - serverless-plugin-common-excludes
+
+stepFunctions:
+  stateMachines:
+    rand:
+      name: rand
+      definition:
+        Comment: 'Step function executing random number lambda function'
+        StartAt: CalculateMinAndMaxRandomNumber
+        States:
+          CalculateMinAndMaxRandomNumber:
+            Type: Task
+            Resource: arn:aws:lambda:ap-south-1:385795619489:function:step-functions-dev-randomNumber
+            ResultPath: "$.minAndMax"
+            Next: CalculateRandomNumber
+          CalculateRandomNumber:
+            Type: Task
+            Resource: arn:aws:lambda:ap-south-1:385795619489:function:step-functions-dev-randomNumberFromRange
+            InputPath: "$.minAndMax"
+            ResultPath: "$.result"
+            Next: Choice
+          Choice:
+            Type: Choice
+            Choices: 
+              - Variable: "$.result.body"
+                NumericLessThan: 3000
+                Next: Success
+              - Variable: "$.result.body"
+                NumericGreaterThan: 3000
+                Next: Fail
+          Success:
+            Type: Succeed
+          Fail:
+            Type: Fail
